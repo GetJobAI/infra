@@ -1,0 +1,36 @@
+@startuml
+
+skin rose
+skinparam backgroundColor #EEEBDC
+
+component "API Gateway" as gateway
+
+component "PostgREST\n(Core API)" as postgrest
+component "Notification Service" as notif_svc
+
+queue "RabbitMQ" as rabbit
+component "Event Relay\n(Listen/Notify Bridge)" as event_relay
+
+component "Resume Parsing" as worker_resume
+component "Job Parsing" as worker_job
+component "Vectorisation " as worker_vector
+component "ATS Scoring" as worker_ats
+component "Optimiser" as worker_opt
+component "PDF Generator" as worker_pdf
+
+gateway --> postgrest : /api/*
+gateway --> notif_svc : SSE notifications
+
+postgrest .right.> event_relay : Triggers
+event_relay --> rabbit : Publishes events
+
+rabbit =d=> worker_resume
+rabbit =d=> worker_job
+rabbit =d=> worker_vector
+rabbit =d=> worker_ats
+rabbit =d=> worker_opt
+rabbit =d=> worker_pdf
+
+rabbit =u=> notif_svc : Listens for SSE updates
+
+@enduml
