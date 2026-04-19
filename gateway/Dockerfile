@@ -6,3 +6,4 @@ RUN xcaddy build \
 # Run
 FROM caddy:alpine
 COPY --from=builder /usr/bin/caddy /usr/bin/caddy
+COPY ./index.html /etc/caddy/static/index.html

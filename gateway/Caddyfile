@@ -1,6 +1,10 @@
 {
     email {$ADMIN_EMAIL}
 
+    log {
+        format console
+    }
+
     order jwtauth before reverse_proxy
 }
 
@@ -32,6 +36,20 @@
     handle /api/v1/public/* {
         uri strip_prefix /api/v1
         reverse_proxy core-api:3000
+    }
+
+    handle /api/v1/upload {
+        header Access-Control-Expose-Headers "X-File-Name"
+        header X-File-Name "{http.request.uuid}"
+
+        jwtauth {
+            jwk_url {$CLERK_ENDPOINT}/.well-known/jwks.json
+            issuer_whitelist {$CLERK_ENDPOINT}
+
+            user_claims sub role
+        }
+
+        # TODO(pencelheimer): redirect to the resume parser
     }
 
     handle /api/v1/* {

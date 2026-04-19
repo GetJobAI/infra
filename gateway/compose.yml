@@ -18,7 +18,7 @@ services:
 
     volumes:
       - ./gateway/Caddyfile:/etc/caddy/Caddyfile
-      - ./gateway/index.html:/etc/caddy/static/index.html
+      - resumes:/shared-data/resumes
       - gateway_data:/data
       - gateway_config:/config
 
@@ -28,3 +28,4 @@ services:
 volumes:
   gateway_data:
   gateway_config:
+  resumes:
