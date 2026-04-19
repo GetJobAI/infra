@@ -1,0 +1,21 @@
+services:
+  migrations:
+    container_name: migrations
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+    build:
+      # TODO(pencelheimer): set the correct url
+      # context: https://github.com/GetJobAI/core-api.git#main
+      context: ../core-api/
+      dockerfile: Dockerfile
+    command: up
+
+    environment:
+      - DATABASE_URL=postgres://postgres:${DB_PASSWORD}@db:5432/${DB_NAME}?sslmode=disable
+      - DB_PASSWORD=${DB_PASSWORD}
+
+    networks:
+      - proxy_network

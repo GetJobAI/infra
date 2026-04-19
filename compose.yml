@@ -1,0 +1,10 @@
+name: getjob-ai
+
+include:
+  - gateway/compose.yml
+  - db/compose.yml
+  - migrations/compose.yml
+  - core-api/compose.yml
+
+networks:
+  proxy_network:
