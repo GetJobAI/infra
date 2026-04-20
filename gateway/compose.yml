@@ -4,7 +4,7 @@ services:
     restart: unless-stopped
 
     build:
-      context: ./gateway/
+      context: ./
       dockerfile: Dockerfile
 
     environment:
@@ -17,7 +17,7 @@ services:
       - "${HTTPS_PORT:-443}:443"
 
     volumes:
-      - ./gateway/Caddyfile:/etc/caddy/Caddyfile
+      - ./Caddyfile:/etc/caddy/Caddyfile
       - resumes:/shared-data/resumes
       - gateway_data:/data
       - gateway_config:/config
