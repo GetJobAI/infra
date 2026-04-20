@@ -14,8 +14,8 @@ down:
     docker compose down
 
 # Show the gateway logs
-logs:
-    docker compose logs -f gateway
+logs container="gateway":
+    docker compose logs -f {{ container }}
 
 # Check the gateway config
 check:
