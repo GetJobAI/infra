@@ -1,0 +1,22 @@
+services:
+  event-relay:
+    container_name: event-relay
+    restart: unless-stopped
+
+    depends_on:
+      db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+    build:
+      context: https://github.com/GetJobAI/event-relay.git#main
+      dockerfile: Dockerfile
+
+    environment:
+      - EVENT_RELAY_DB_URL=postgres://postgres:${DB_PASSWORD}@db:5432/${DB_NAME}?sslmode=disable
+      - EVENT_RELAY_RMQ_URL=amqp://${RABBITMQ_USER:-guest}:${RABBITMQ_PASSWORD:-guest}@rabbitmq:5672/%2f
+      - RUST_LOG=info,event_relay=debug
+
+    networks:
+      - proxy_network

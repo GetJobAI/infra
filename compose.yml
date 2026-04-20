@@ -5,6 +5,8 @@ include:
   - db/compose.yml
   - migrations/compose.yml
   - core-api/compose.yml
+  - rabbitmq/compose.yml
+  - event-relay/compose.yml
 
 networks:
   proxy_network:
