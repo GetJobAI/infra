@@ -5,10 +5,12 @@
         format console
     }
 
+    auto_https off
+
     order jwtauth before reverse_proxy
 }
 
-{$DOMAIN} {
+http://{$DOMAIN} {
     # NOTE(pencelheimer): sanitize headers
     request_header -X-User-Id
     request_header -X-User-Role
@@ -67,3 +69,14 @@
         }
     }
 }
+
+http://rabbitmq.{$DOMAIN} {
+    encode zstd gzip
+    reverse_proxy rabbitmq:15672
+}
+
+http://qdrant.{$DOMAIN} {
+    encode zstd gzip
+    reverse_proxy qdrant:6333
+}
+
