@@ -15,6 +15,12 @@ services:
       context: https://github.com/GetJobAI/vectoriser.git#main
       dockerfile: Dockerfile
 
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
     environment:
       - POSTGRES_URL=postgres://postgres:${DB_PASSWORD}@db:5432/${DB_NAME}?sslmode=disable
       - QDRANT_URL=http://qdrant:6334
