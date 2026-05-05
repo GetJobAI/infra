@@ -1,0 +1,20 @@
+services:
+  pdf-generator:
+    container_name: pdf-generator
+    restart: unless-stopped
+
+    build:
+      context: https://github.com/GetJobAI/pdf-generator.git#main
+      dockerfile: Dockerfile
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    environment:
+      - RUST_LOG=info,pdf_generator=debug
+
+    networks:
+      - proxy_network

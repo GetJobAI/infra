@@ -10,6 +10,7 @@ include:
   - event-relay/compose.yml
   - qdrant/compose.yml
   - vectoriser/compose.yml
+  - pdf-generator/compose.yml
 
 networks:
   proxy_network:
