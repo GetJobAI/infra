@@ -1,6 +1,7 @@
 name: getjob-ai
 
 include:
+  - frontend/compose.yml
   - gateway/compose.yml
   - db/compose.yml
   - migrations/compose.yml

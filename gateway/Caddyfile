@@ -68,6 +68,10 @@ http://{$DOMAIN} {
             header_up X-User-Role {http.auth.user.role}
         }
     }
+
+    handle /* {
+        reverse_proxy frontend:3000
+    }
 }
 
 http://rabbitmq.{$DOMAIN} {
