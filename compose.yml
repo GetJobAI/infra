@@ -7,6 +7,8 @@ include:
   - core-api/compose.yml
   - rabbitmq/compose.yml
   - event-relay/compose.yml
+  - qdrant/compose.yml
+  - vectoriser/compose.yml
 
 networks:
   proxy_network:

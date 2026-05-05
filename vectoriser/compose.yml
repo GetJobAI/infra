@@ -1,0 +1,31 @@
+services:
+  vectoriser:
+    container_name: vectoriser
+    restart: unless-stopped
+
+    depends_on:
+      db:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+    build:
+      context: https://github.com/GetJobAI/vectoriser.git#main
+      dockerfile: Dockerfile
+
+    environment:
+      - POSTGRES_URL=postgres://postgres:${DB_PASSWORD}@db:5432/${DB_NAME}?sslmode=disable
+      - QDRANT_URL=http://qdrant:6334
+      - QDRANT_API_KEY=${QDRANT_API_KEY}
+      - QDRANT_COLLECTION=document_vectors
+      - RABBITMQ_URL=amqp://${RABBITMQ_USER:-guest}:${RABBITMQ_PASSWORD:-guest}@rabbitmq:5672/%2f
+      - RABBITMQ_CONSUME_QUEUE=document.parsed
+      - RABBITMQ_PUBLISH_EXCHANGE=document.events
+      - RABBITMQ_PUBLISH_ROUTING_KEY=vectors.ready
+      - EMBEDDING_BATCH_SIZE=32
+      - RUST_LOG=info,vectoriser=debug
+
+    networks:
+      - proxy_network
