@@ -1,0 +1,59 @@
+@startuml
+
+skinparam backgroundColor #F8F9FA
+skinparam defaultTextAlignment center
+
+<style>
+.db {
+    MinimumWidth 400
+}
+.event_bus {
+    MinimumWidth 400
+}
+</style>
+
+package "Client apps" <<system_boundary>> {
+    rectangle "Frontend Web App" as frontend <<microservice>>
+}
+
+package "Docker Host" <<system_boundary>> {
+    node "API Gateway" as gateway <<microservice>>
+
+    node "Core API" as core_api <<microservice>>
+    node "Event-Relay" as event_relay <<microservice>>
+    node "Vectoriser" as vectoriser <<microservice>>
+    node "Parser" as parser <<microservice>>
+    node "Optimiser" as optimiser <<microservice>>
+    node "ATS Scorer" as ats_scorer <<microservice>>
+    node "PDF Generator" as pdf_generator <<microservice>>
+
+    database "PostgreSQL 18" as db <<db>>
+    database "Qdrant" as qdrant <<vector db>>
+
+    queue "RabbitMQ" as rmq <<event_bus>>
+}
+
+
+frontend .r.> gateway : HTTP(S)
+
+gateway -r-> core_api : /api/v1/*
+gateway --> pdf_generator : /api/v1/export
+core_api .r.> event_relay : PG Channel
+
+core_api ---> db : SQL
+event_relay ---> db : SQL
+vectoriser ---> db : SQL
+ats_scorer ---> db : SQL
+parser ---> db : SQL
+optimiser ---> db : SQL
+
+vectoriser --> qdrant : gRPC
+ats_scorer --> qdrant : gRPC
+
+event_relay -up-> rmq : Publish
+vectoriser -up-> rmq : Publish\nConsume
+ats_scorer -up-> rmq : Publish\nConsume
+parser -up-> rmq : Publish\nConsume
+optimiser -up-> rmq : Publish\nConsume
+
+@enduml

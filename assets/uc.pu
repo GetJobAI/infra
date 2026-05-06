@@ -1,0 +1,76 @@
+@startuml
+left to right direction
+skinparam backgroundColor #F8F9FA
+skinparam defaultTextAlignment center
+
+actor "User" as User
+actor "Clerk\nIdentity Provider" as Clerk
+actor "LLM Provider" as LLM
+
+rectangle "Authentication & Account" {
+    usecase "Реєстрація\nВхід" as UC_Login
+    usecase "Відновлення пароля\nВерифікація email" as UC_Creds
+    usecase "Управління профілем" as UC_Profile
+    usecase "Експорт даних" as UC_ExportData
+    usecase "Видалення акаунту" as UC_Delete
+}
+
+rectangle "Resume Input" {
+    usecase "Завантаження документу" as UC_Upload
+    usecase "NLP Парсинг та рев'ю" as UC_ReviewParse
+
+    usecase "Завантаження LinkedIn ZIP" as UC_Zip
+    usecase "Парсинг CSV" as UC_ParseZip
+
+    usecase "Ручне введення" as UC_Wizard
+}
+
+rectangle "Optimization" {
+    usecase "Генерація супровідного листа" as UC_Cover
+    usecase "XYZ Coach" as UC_XYZ
+    usecase "ATS оптимізація" as UC_ATSOpt
+}
+
+rectangle "ATS Scoring" as PkgATS {
+    usecase "Розрахунок ATS Score" as UC_ATS_Calc
+    usecase "Перегляд відсутніх ключових слів" as UC_ATS_Breakdown
+  }
+
+rectangle "Export" {
+    usecase "Перегляд ATS Score" as UC_ExportATS
+    usecase "Експорт резюме" as UC_ExportRes
+}
+
+User --> UC_Login
+User --> UC_Creds
+User --> UC_Profile
+User --> UC_ExportData
+User --> UC_Delete
+
+UC_Login --> Clerk
+UC_Creds --> Clerk
+
+User --> UC_Wizard
+
+User --> UC_Upload
+UC_Upload ..> UC_ReviewParse : <<include>>
+
+User --> UC_Zip
+UC_Zip ..> UC_ParseZip : <<include>>
+
+UC_XYZ --> LLM
+UC_ATSOpt --> LLM
+UC_Cover --> LLM
+
+User --> UC_ExportRes
+User --> UC_ExportATS
+
+UC_ExportRes <.. UC_XYZ : <<extend>>
+UC_ExportRes <.. UC_ATSOpt : <<extend>>
+
+UC_ATSOpt .l.> UC_ATS_Calc : <<include>>
+UC_ATS_Calc ..> UC_ATS_Breakdown : <<include>>
+
+UC_ExportATS ..> UC_ATS_Calc : <<include>>
+UC_ATSOpt <.l. UC_Cover : <<extend>>
+@enduml
