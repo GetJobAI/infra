@@ -9,6 +9,7 @@ services:
       rabbitmq:
         condition: service_healthy
 
+    image: ghcr.io/getjobai/event-relay:latest
     build:
       context: https://github.com/GetJobAI/event-relay.git#main
       dockerfile: Dockerfile

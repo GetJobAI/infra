@@ -3,6 +3,7 @@ services:
     container_name: pdf-generator
     restart: unless-stopped
 
+    image: ghcr.io/getjobai/pdf-generator:latest
     build:
       context: https://github.com/GetJobAI/pdf-generator.git#main
       dockerfile: Dockerfile

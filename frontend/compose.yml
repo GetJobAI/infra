@@ -3,6 +3,7 @@ services:
     container_name: frontend
     restart: unless-stopped
 
+    image: ghcr.io/getjobai/frontend:latest
     build:
       context: https://github.com/GetJobAI/frontend.git#main
       dockerfile: Dockerfile

@@ -3,6 +3,7 @@ services:
     container_name: gateway
     restart: unless-stopped
 
+    image: ghcr.io/getjobai/gateway:latest
     build:
       context: ./
       dockerfile: Dockerfile

@@ -7,7 +7,7 @@ restart: down && up
 
 # Start the stack
 up:
-    docker compose up -d --build
+    docker compose up -d
 
 # Stop the stack
 down:
