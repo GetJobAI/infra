@@ -11,6 +11,7 @@ include:
   - qdrant/compose.yml
   - vectoriser/compose.yml
   - pdf-generator/compose.yml
+  - ats-scorer/compose.yml
 
 networks:
   proxy_network:

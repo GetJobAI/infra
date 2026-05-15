@@ -1,0 +1,39 @@
+services:
+  ats-scorer:
+    container_name: ats-scorer
+    restart: unless-stopped
+
+    depends_on:
+      db:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+    image: ghcr.io/getjobai/ats-scorer:latest
+    build:
+      context: https://github.com/GetJobAI/ats-scorer.git#main
+      dockerfile: Dockerfile
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    environment:
+      - POSTGRES_URL=postgres://postgres:${DB_PASSWORD}@db:5432/${DB_NAME}?sslmode=disable
+      - QDRANT_URL=http://qdrant:6334
+      - QDRANT_COLLECTION=document_vectors
+      - RABBITMQ_URL=amqp://${RABBITMQ_USER:-guest}:${RABBITMQ_PASSWORD:-guest}@rabbitmq:5672/%2f
+      - RABBITMQ_CONSUME_QUEUE=ats.score.requests
+      - RABBITMQ_PUBLISH_EXCHANGE=ats.events
+      - RABBITMQ_PUBLISH_ROUTING_KEY=ats.score.ready
+      - TFIDF_TOP_K=20
+      - RERANKER_TOP_K=5
+      - EMBEDDING_BATCH_SIZE=32
+      - RUST_LOG=info,ats_scorer=debug
+
+    networks:
+      - proxy_network
