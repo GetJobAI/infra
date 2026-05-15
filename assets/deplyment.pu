@@ -1,6 +1,5 @@
 @startuml
 
-skinparam backgroundColor #F8F9FA
 skinparam defaultTextAlignment center
 
 <style>
@@ -34,26 +33,26 @@ package "Docker Host" <<system_boundary>> {
 }
 
 
-frontend .r.> gateway : HTTP(S)
+frontend .r.> gateway : HTTPS
 
-gateway -r-> core_api : /api/v1/*
-gateway --> pdf_generator : /api/v1/export
-core_api .r.> event_relay : PG Channel
+gateway -r-> core_api : HTTP
+gateway --> pdf_generator : HTTP
+core_api .r.> event_relay : PG LISTEN/NOTIFY
 
-core_api ---> db : SQL
-event_relay ---> db : SQL
-vectoriser ---> db : SQL
-ats_scorer ---> db : SQL
-parser ---> db : SQL
-optimiser ---> db : SQL
+core_api ---> db : TCP/IP
+event_relay ---> db : TCP/IP
+vectoriser ---> db : TCP/IP
+ats_scorer ---> db : TCP/IP
+parser ---> db : TCP/IP
+optimiser ---> db : TCP/IP
 
 vectoriser --> qdrant : gRPC
 ats_scorer --> qdrant : gRPC
 
-event_relay -up-> rmq : Publish
-vectoriser -up-> rmq : Publish\nConsume
-ats_scorer -up-> rmq : Publish\nConsume
-parser -up-> rmq : Publish\nConsume
-optimiser -up-> rmq : Publish\nConsume
+event_relay -up-> rmq : AMQP
+vectoriser -up-> rmq : AMQP
+ats_scorer -up-> rmq : AMQP
+parser -up-> rmq : AMQP
+optimiser -up-> rmq : AMQP
 
 @enduml
