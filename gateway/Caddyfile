@@ -69,6 +69,7 @@ http://{$DOMAIN} {
 
         uri strip_prefix /api/v1
         reverse_proxy core-api:3000 {
+            header_up -Authorization
             header_up X-User-Id {http.auth.user.sub}
             header_up X-User-Role {http.auth.user.role}
         }
@@ -88,4 +89,3 @@ http://qdrant.{$DOMAIN} {
     encode zstd gzip
     reverse_proxy qdrant:6333
 }
-
