@@ -3,6 +3,7 @@ services:
     image: rabbitmq:3-management-alpine
     container_name: rabbitmq
     restart: unless-stopped
+    pull_policy: always
 
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]

@@ -2,6 +2,7 @@ services:
   event-relay:
     container_name: event-relay
     restart: unless-stopped
+    pull_policy: always
 
     depends_on:
       db:

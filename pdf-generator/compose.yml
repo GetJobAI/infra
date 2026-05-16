@@ -2,6 +2,7 @@ services:
   pdf-generator:
     container_name: pdf-generator
     restart: unless-stopped
+    pull_policy: always
 
     image: ghcr.io/getjobai/pdf-generator:latest
     build:

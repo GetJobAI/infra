@@ -2,6 +2,7 @@ services:
   vectoriser:
     container_name: vectoriser
     restart: unless-stopped
+    pull_policy: always
 
     depends_on:
       db:

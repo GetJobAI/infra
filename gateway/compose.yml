@@ -2,6 +2,7 @@ services:
   gateway:
     container_name: gateway
     restart: unless-stopped
+    pull_policy: always
 
     image: ghcr.io/getjobai/gateway:latest
     build:

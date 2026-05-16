@@ -2,6 +2,7 @@ services:
   frontend:
     container_name: frontend
     restart: unless-stopped
+    pull_policy: always
 
     image: ghcr.io/getjobai/frontend:latest
     build:

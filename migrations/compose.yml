@@ -1,6 +1,7 @@
 services:
   migrations:
     container_name: migrations
+    pull_policy: always
 
     depends_on:
       db:

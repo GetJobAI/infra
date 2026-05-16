@@ -6,6 +6,7 @@ services:
     image: postgrest/postgrest
     container_name: core-api
     restart: unless-stopped
+    pull_policy: always
 
     environment:
       PGRST_SERVER_PORT: 3000

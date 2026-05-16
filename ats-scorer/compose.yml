@@ -2,6 +2,7 @@ services:
   ats-scorer:
     container_name: ats-scorer
     restart: unless-stopped
+    pull_policy: always
 
     depends_on:
       db:
