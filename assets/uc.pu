@@ -45,42 +45,42 @@ rectangle "Export" {
     usecase "Експорт резюме" as UC_ExportRes
 }
 
-User --> UC_Register
-User --> UC_Login
-User --> UC_RecoverPassword
-User --> UC_ChangePassword
-User --> UC_Profile
-User --> UC_ExportData
-User --> UC_Delete
+User -- UC_Register
+User -- UC_Login
+User -- UC_RecoverPassword
+User -- UC_ChangePassword
+User -- UC_Profile
+User -- UC_ExportData
+User -- UC_Delete
 
-UC_Register --> Clerk
-UC_Login --> Clerk
-UC_VerifyEmail --> Clerk
+UC_Register -- Clerk
+UC_Login -- Clerk
+UC_VerifyEmail -- Clerk
 UC_RecoverPassword ..> UC_VerifyEmail : <<include>>
 UC_ChangePassword ..> UC_VerifyEmail : <<include>>
 
-User --> UC_Wizard
+User -- UC_Wizard
 
-User --> UC_Upload
+User -- UC_Upload
 UC_Upload ..> UC_Parse : <<include>>
-UC_ReviewParse ..> UC_Upload : <<extend>>
-User --> UC_ReviewParse
+UC_ReviewParse <.. UC_Upload : <<extend>>
+User -- UC_ReviewParse
 
-User --> UC_Zip
+User -- UC_Zip
 UC_Zip ..> UC_ParseZip : <<include>>
 
-UC_XYZ --> LLM
-UC_ATSOpt --> LLM
-UC_Cover --> LLM
+UC_XYZ -- LLM
+UC_ATSOpt -- LLM
+UC_Cover -- LLM
 
-User --> UC_ExportRes
-User --> UC_ExportATS
+User -- UC_ExportRes
+User -- UC_ExportATS
 
 UC_ExportRes <.. UC_ATSOpt : <<extend>>
 
 UC_ATSOpt .l.> UC_ATS_Calc : <<include>>
-UC_ATS_Breakdown ..> UC_ATS_Calc : <<extend>>
-User --> UC_ATS_Breakdown
+UC_ATS_Breakdown <.. UC_ATS_Calc : <<extend>>
+User -- UC_ATS_Breakdown
 
 UC_ExportATS ..> UC_ATS_Calc : <<include>>
 UC_ATSOpt <.. UC_Cover : <<extend>>
