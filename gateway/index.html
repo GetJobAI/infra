@@ -6,14 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
   </head>
   <body>
-    <script
-      id="api-reference"
-      data-url="/api/v1/"
-    ></script>
+    <script id="api-reference"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference"></script>
 
     <script>
-        document.getElementById('api-reference').configuration = { }
+        document.getElementById('api-reference').configuration = {
+            sources: [
+                { url: '/api/v1/', slug: 'core-api', title: 'Core API' },
+                { url: '/api/v1/pdf/openapi.json', slug: 'pdf-generator', title: 'PDF Generator' }
+            ]
+        }
     </script>
   </body>
 </html>
