@@ -35,7 +35,7 @@ http://{$DOMAIN} {
         reverse_proxy core-api:3000
     }
 
-    handle /api/v1/pdf/openapi.json {
+    handle /api/v1/pdf/* {
         uri strip_prefix /api/v1/pdf
         reverse_proxy pdf-generator:8080
     }
