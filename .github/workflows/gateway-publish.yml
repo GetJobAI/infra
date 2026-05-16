@@ -4,7 +4,11 @@ on:
   push:
     branches: [ "main" ]
     paths:
-      - 'gateway/**'
+      # NOTE(pencelheimer): maybe mount the `index.html` into the container and
+      # don't copy it in the image
+      - 'gateway/index.html'
+      - 'gateway/Dockerfile'
+      - 'gateway/compose.yml'
   workflow_dispatch:
 
 env:
