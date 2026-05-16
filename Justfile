@@ -2,8 +2,11 @@
 default:
     @just --list --unsorted
 
+restart container:
+    docker compose restart {{ container }}
+
 # Restart the stack
-restart: down && up
+restart-all: down && up
 
 # Start the stack
 up:
