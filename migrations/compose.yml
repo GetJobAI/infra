@@ -7,6 +7,8 @@ services:
       db:
         condition: service_healthy
 
+    image: ghcr.io/getjobai/core-api:latest
+
     build:
       context: https://github.com/GetJobAI/core-api.git#main
       dockerfile: Dockerfile
