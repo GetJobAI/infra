@@ -64,7 +64,8 @@ http://{$DOMAIN} {
             jwk_url {$CLERK_ENDPOINT}/.well-known/jwks.json
             issuer_whitelist {$CLERK_ENDPOINT}
 
-            user_claims sub role
+            user_claims sub
+            meta_claims "role->role"
         }
 
         uri strip_prefix /api/v1
