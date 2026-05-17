@@ -60,20 +60,8 @@ http://{$DOMAIN} {
     }
 
     handle /api/v1/* {
-        jwtauth {
-            jwk_url {$CLERK_ENDPOINT}/.well-known/jwks.json
-            issuer_whitelist {$CLERK_ENDPOINT}
-
-            user_claims sub
-            meta_claims "role->role"
-        }
-
         uri strip_prefix /api/v1
-        reverse_proxy core-api:3000 {
-            header_up -Authorization
-            header_up X-User-Id {http.auth.user.sub}
-            header_up X-User-Role {http.auth.user.role}
-        }
+        reverse_proxy core-api:3000
     }
 
     handle /* {
