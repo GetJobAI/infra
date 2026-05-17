@@ -12,6 +12,7 @@ include:
   - vectoriser/compose.yml
   - pdf-generator/compose.yml
   - ats-scorer/compose.yml
+  - ai-optimizer/compose.yml
 
 networks:
   proxy_network:
