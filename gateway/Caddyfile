@@ -45,6 +45,21 @@ http://{$DOMAIN} {
         reverse_proxy core-api:3000
     }
 
+    handle /api/v1/parser/* {
+        uri strip_prefix /api/v1/parser
+        reverse_proxy parser:8000
+    }
+
+    handle /api/v1/optimizer/openapi.json {
+        rewrite * /openapi/v1.json
+        reverse_proxy ai-optimizer:8080
+    }
+
+    handle /api/v1/optimisations/* {
+        uri replace /api/v1/optimisations /api/optimisations
+        reverse_proxy ai-optimizer:8080
+    }
+
     handle /api/v1/upload {
         header Access-Control-Expose-Headers "X-File-Name"
         header X-File-Name "{http.request.uuid}"
