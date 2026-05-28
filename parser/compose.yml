@@ -1,0 +1,37 @@
+services:
+  parser:
+    container_name: parser
+    restart: unless-stopped
+    pull_policy: always
+
+    depends_on:
+      db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      migrations:
+        condition: service_completed_successfully
+
+    image: ghcr.io/getjobai/parser:latest
+    build:
+      context: https://github.com/GetJobAI/parser.git#main
+      dockerfile: Dockerfile
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/openapi.json"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    environment:
+      - DATABASE_URL=postgresql://${DB_USER:-postgres}:${DB_PASSWORD}@db:5432/${DB_NAME}
+      - USER_ID_HEADER=X-User-Id
+      - PARSER_VERSION=v1
+      - RABBITMQ_URL=amqp://${RABBITMQ_USER:-guest}:${RABBITMQ_PASSWORD:-guest}@rabbitmq:5672/%2f
+      - RABBITMQ_EXCHANGE=resume.events
+      - RABBITMQ_ROUTING_KEY=resume.parsing.completed
+      - RABBITMQ_EVENT_NAME=resume.parsing.completed
+      - RABBITMQ_QUEUE=resume.parsing.completed.queue
+
+    networks:
+      - proxy_network
