@@ -29,7 +29,9 @@ services:
       - QDRANT_API_KEY=${QDRANT_API_KEY}
       - QDRANT_COLLECTION=document_vectors
       - RABBITMQ_URL=amqp://${RABBITMQ_USER:-guest}:${RABBITMQ_PASSWORD:-guest}@rabbitmq:5672/%2f
-      - RABBITMQ_CONSUME_QUEUE=document.parsed
+      - RABBITMQ_CONSUME_EXCHANGE=resume.events
+      - RABBITMQ_CONSUME_ROUTING_KEY=resume.parsing.completed
+      - RABBITMQ_CONSUME_QUEUE=resume.parsing.completed.queue
       - RABBITMQ_PUBLISH_EXCHANGE=document.events
       - RABBITMQ_PUBLISH_ROUTING_KEY=vectors.ready
       - EMBEDDING_BATCH_SIZE=32

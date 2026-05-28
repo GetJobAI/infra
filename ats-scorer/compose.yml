@@ -29,8 +29,7 @@ services:
       - QDRANT_COLLECTION=document_vectors
       - RABBITMQ_URL=amqp://${RABBITMQ_USER:-guest}:${RABBITMQ_PASSWORD:-guest}@rabbitmq:5672/%2f
       - RABBITMQ_CONSUME_QUEUE=ats.score.requests
-      - RABBITMQ_PUBLISH_EXCHANGE=ats.events
-      - RABBITMQ_PUBLISH_ROUTING_KEY=ats.score.ready
+      - RABBITMQ_PUBLISH_EXCHANGE=resume.scored
       - TFIDF_TOP_K=20
       - RERANKER_TOP_K=5
       - EMBEDDING_BATCH_SIZE=32
