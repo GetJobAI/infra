@@ -3,6 +3,7 @@ services:
     container_name: vectoriser
     restart: unless-stopped
     pull_policy: always
+    init: true
 
     depends_on:
       db:
