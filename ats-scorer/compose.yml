@@ -28,6 +28,7 @@ services:
       - POSTGRES_URL=postgres://postgres:${DB_PASSWORD}@db:5432/${DB_NAME}?sslmode=disable
       - QDRANT_URL=http://qdrant:6334
       - QDRANT_COLLECTION=document_vectors
+      - QDRANT_API_KEY=${QDRANT_API_KEY}
       - RABBITMQ_URL=amqp://${RABBITMQ_USER:-guest}:${RABBITMQ_PASSWORD:-guest}@rabbitmq:5672/%2f
       - RABBITMQ_CONSUME_EXCHANGE=db_events_exchange
       - RABBITMQ_CONSUME_ROUTING_KEY=ats_score_requests.insert
