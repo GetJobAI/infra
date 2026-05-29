@@ -35,6 +35,8 @@ services:
       - RABBITMQ_CONSUME_QUEUE=resume.parsing.completed.queue
       - RABBITMQ_PUBLISH_EXCHANGE=document.events
       - RABBITMQ_PUBLISH_ROUTING_KEY=vectors.ready
+      - RABBITMQ_DB_EVENTS_EXCHANGE=db_events_exchange
+      - RABBITMQ_DB_EVENTS_QUEUE=vectoriser.db.events
       - EMBEDDING_BATCH_SIZE=32
       - RUST_LOG=info,vectoriser=debug
 
