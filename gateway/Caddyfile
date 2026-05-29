@@ -46,17 +46,19 @@ http://{$DOMAIN} {
     }
 
     handle /api/v1/parser/* {
-        jwtauth {
-            jwk_url {$CLERK_ENDPOINT}/.well-known/jwks.json
-            issuer_whitelist {$CLERK_ENDPOINT}
+        route {
+            jwtauth {
+                jwk_url {$CLERK_ENDPOINT}/.well-known/jwks.json
+                issuer_whitelist {$CLERK_ENDPOINT}
 
-            user_claims sub role
+                user_claims sub role
+            }
+
+            request_header X-User-Id {http.auth.user.id}
+
+            uri strip_prefix /api/v1/parser
+            reverse_proxy parser:8000
         }
-
-        request_header X-User-Id {http.auth.user.id}
-
-        uri strip_prefix /api/v1/parser
-        reverse_proxy parser:8000
     }
 
     handle /api/v1/optimizer/openapi.json {
@@ -65,17 +67,19 @@ http://{$DOMAIN} {
     }
 
     handle /api/v1/optimisations/* {
-        jwtauth {
-            jwk_url {$CLERK_ENDPOINT}/.well-known/jwks.json
-            issuer_whitelist {$CLERK_ENDPOINT}
+        route {
+            jwtauth {
+                jwk_url {$CLERK_ENDPOINT}/.well-known/jwks.json
+                issuer_whitelist {$CLERK_ENDPOINT}
 
-            user_claims sub role
+                user_claims sub role
+            }
+
+            request_header X-User-Id {http.auth.user.id}
+
+            uri replace /api/v1/optimisations /api/optimisations
+            reverse_proxy ai-optimizer:8080
         }
-
-        request_header X-User-Id {http.auth.user.id}
-
-        uri replace /api/v1/optimisations /api/optimisations
-        reverse_proxy ai-optimizer:8080
     }
 
     handle /api/v1/* {
