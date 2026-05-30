@@ -1,4 +1,15 @@
 services:
+  vectoriser-model-init:
+    container_name: vectoriser-model-init
+    restart: "no"
+    image: ghcr.io/getjobai/vectoriser:latest
+    build:
+      context: https://github.com/GetJobAI/vectoriser.git#main
+      dockerfile: Dockerfile
+    command: ["download-model"]
+    volumes:
+      - fastembed_models:/app/.fastembed_cache
+
   vectoriser:
     container_name: vectoriser
     restart: unless-stopped
@@ -6,6 +17,8 @@ services:
     init: true
 
     depends_on:
+      vectoriser-model-init:
+        condition: service_completed_successfully
       db:
         condition: service_healthy
       qdrant:
@@ -40,5 +53,11 @@ services:
       - EMBEDDING_BATCH_SIZE=32
       - RUST_LOG=info,vectoriser=debug
 
+    volumes:
+      - fastembed_models:/app/.fastembed_cache
+
     networks:
       - proxy_network
+
+volumes:
+  fastembed_models:

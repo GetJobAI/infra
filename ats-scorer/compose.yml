@@ -1,4 +1,15 @@
 services:
+  ats-scorer-model-init:
+    container_name: ats-scorer-model-init
+    restart: "no"
+    image: ghcr.io/getjobai/ats-scorer:latest
+    build:
+      context: https://github.com/GetJobAI/ats-scorer.git#main
+      dockerfile: Dockerfile
+    command: ["download-models"]
+    volumes:
+      - fastembed_models:/app/.fastembed_cache
+
   ats-scorer:
     container_name: ats-scorer
     restart: unless-stopped
@@ -6,6 +17,8 @@ services:
     init: true
 
     depends_on:
+      ats-scorer-model-init:
+        condition: service_completed_successfully
       db:
         condition: service_healthy
       qdrant:
@@ -39,5 +52,11 @@ services:
       - EMBEDDING_BATCH_SIZE=32
       - RUST_LOG=info,ats_scorer=debug
 
+    volumes:
+      - fastembed_models:/app/.fastembed_cache
+
     networks:
       - proxy_network
+
+volumes:
+  fastembed_models:
