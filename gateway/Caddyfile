@@ -45,6 +45,11 @@ http://{$DOMAIN} {
         reverse_proxy core-api:3000
     }
 
+    handle /api/v1/parser/openapi.json {
+        uri strip_prefix /api/v1/parser
+        reverse_proxy parser:8000
+    }
+
     handle /api/v1/parser/* {
         route {
             jwtauth {
